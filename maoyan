@@ -1,0 +1,18 @@
+import requests
+from urllib import request
+from bs4 import BeautifulSoup
+
+for i in range(10):
+    offset = i*10
+    print('开始爬取第'+str(i+1)+"页")
+    url = 'https://maoyan.com/board/4?offset='+str(offset)
+    response = requests.get(url,headers={"User-Agent":"Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36"})
+    soup = BeautifulSoup(response.text,'html.parser')
+    index = soup.select('i.board-index')
+    name = soup.select('p.name a')
+    star = soup.select('p.star')
+    releasetime = soup.select('p.releasetime')
+    f = open('./猫眼.txt','a',encoding='utf-8')
+    for i in range(len(index)):
+        f.write('排名:' + ' '+index[i].text +'电影名 '+name[i].text+star[i].text.strip()+releasetime[i].text+'\n'+'='*40+'\n')
+    f.close()
